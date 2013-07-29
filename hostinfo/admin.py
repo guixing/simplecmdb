@@ -11,10 +11,8 @@ class HostAdmin(admin.ModelAdmin):
         'cpu_model',
         'cpu_num',
         'sn',
+        'identity',
         ]
-
-class IPaddrAdmin(admin.ModelAdmin):
-    list_display = ['ipaddr', 'host']
 
 class HostGroupAdmin(admin.ModelAdmin):
     list_display = ['name',]

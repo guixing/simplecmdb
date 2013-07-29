@@ -8,6 +8,7 @@ urlpatterns = patterns('',
     url(r'^api/collect$', 'hostinfo.views.collect'),
     url(r'^api/gethosts\.json$', 'hostinfo.views.gethosts'),
     url(r'^api/gethosts$', 'hostinfo.views.gethoststxt'),
+    url(r'^api/gethostbyident$', 'hostinfo.views.getHostByIdentity'),
     url(r'^admin/doc/', include('django.contrib.admindocs.urls')),
     url(r'^admin/', include(admin.site.urls)),
 )

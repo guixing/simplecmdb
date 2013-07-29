@@ -21,10 +21,12 @@ def collect(request):
         sn = req.POST.get('sn')
         osver = req.POST.get('osver')
         hostname = req.POST.get('hostname')
+        identity = req.POST.get('identity')
         try:
-            host = Host.objects.get(hostname=hostname)
+            host = Host.objects.get(identity=identity)
         except:
             host = Host()
+        host.identity = identity
         host.hostname=hostname
         host.product=product
         host.cpu_num=int(cpu_num)
@@ -63,3 +65,19 @@ def gethoststxt(req):
             ips = ','.join([i.ipaddr for i in h.ipaddr_set.all()])
             d += "%s %s %s\n" % (hg.name, h.hostname, ips)
     return HttpResponse(d)
+
+
+def getHostByIdentity(req):
+    try:
+        identity = req.GET['hostidentity']
+    except:
+        return HttpResponse(json.dumps({'status':-1,'message':'no option'}))
+    try:
+        host = Host.objects.get(identity=identity)
+    except:
+        return HttpResponse(json.dumps({'status':-2,'message':'no host'}))
+    data = {'hostname':host.hostname,
+            'hostgroups': [str(hg.name) for hg in host.hostgroup_set.all()]
+}
+    return HttpResponse(json.dumps({'status':0,'message':'ok','data':data}))
+    
