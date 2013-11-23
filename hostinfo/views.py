@@ -41,6 +41,32 @@ def collect(request):
     else:
         return HttpResponse("no post data")
 
+def collectjson(request):
+    req = request
+    if req.method == "POST":
+        jsonobj = json.loads(req.body)
+        try:
+            host = Host.objects.get(identity=jsonobj['identity'])
+        except:
+            host = Host()
+        try:
+            host.identity = jsonobj['identity']
+            host.hostname = jsonobj['hostname']
+            host.product = jsonobj['product']
+            host.cpu_num = jsonobj['cpu_num']
+            host.cpu_model = jsonobj['cpu_model']
+            host.memory = jsonobj['memory']
+            host.sn = jsonobj['sn']
+            host.osver = jsonobj['osver']
+            host.vendor = jsonobj['vendor']
+            host.ipaddr = jsonobj['ip']
+            host.save()
+            return HttpResponse(json.dumps({'status':0,'message':"ok"}))
+        except Exception, e:
+            return HttpResponse(json.dumps({'status':-1,'message':str(e)}))
+    else:
+        return HttpResponse(json.dumps({'status':-2,'message':"no post data"}))
+
 def gethosts(req):
     d=[]
     hostgroups = HostGroup.objects.all()

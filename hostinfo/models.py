@@ -1,7 +1,5 @@
 from django.db import models
 
-# Create your models here.
-
 class Host(models.Model):
     """store host information"""
     hostname = models.CharField(max_length=30)
@@ -14,14 +12,9 @@ class Host(models.Model):
     sn = models.CharField(max_length=30)
     ipaddr = models.IPAddressField(max_length=15)
     identity = models.CharField(max_length=32)
-    # def __init__(self):
-    #     super(Host, self).__init__()
+
     def __unicode__(self):
         return self.hostname
-
-#class IPaddr(models.Model):
-#    ipaddr = models.IPAddressField()
-#    host = models.ForeignKey('Host')
 
 class HostGroup(models.Model):
     name = models.CharField(max_length=30)
@@ -29,5 +22,12 @@ class HostGroup(models.Model):
 
     def __unicode__(self):
         return self.name
-    
-    
+
+
+def handle_hostsave_signal(sender, **kwargs):
+    new_host = kwargs['instance']
+    old_host = Host.objects.get(identity=new_host.identity)
+    if new_host.hostname != old_host.hostname:
+        change_hostname(new_host.ipaddr, new_host.hostname)
+
+#models.signals.pre_save.connect(handle_hostsave_signal, sender=Host)

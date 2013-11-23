@@ -5,7 +5,8 @@ from django.contrib import admin
 admin.autodiscover()
 
 urlpatterns = patterns('',
-    url(r'^api/collect$', 'hostinfo.views.collect'),
+    url(r'^api/collect/?$', 'hostinfo.views.collect'),
+    url(r'^api/collect.json$', 'hostinfo.views.collectjson'),
     url(r'^api/gethosts\.json$', 'hostinfo.views.gethosts'),
     url(r'^api/gethosts$', 'hostinfo.views.gethoststxt'),
     url(r'^api/gethostbyident$', 'hostinfo.views.getHostByIdentity'),
